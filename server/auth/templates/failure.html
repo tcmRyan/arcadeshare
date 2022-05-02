@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Failure</title>
+</head>
+<body>
+    <h2>Login Failed!</h2>
+    <p>Please check your account and then contact your admin</p>
+</body>
+<script>
+    document.body.onload = function(){
+        let login = "{{ data|tojson }}";
+        window.opener.postMessage(
+            {
+                error: "User not found",
+                status: "failed"
+            }, window.opener.location
+        );
+    };
+</script>
+</html>

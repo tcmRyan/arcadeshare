@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:12.10
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=arcade
+      - POSTGRES_USER=arcade
+      - POSTGRES_PASSWORD=d3m0
+
+volumes:
+  postgres_data:
