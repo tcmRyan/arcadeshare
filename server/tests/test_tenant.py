@@ -3,7 +3,7 @@ import os
 
 from flask import current_app
 from server.auth import Tenant
-from server.utils import main_db_sql
+from server.utils import main_db_sql, create_binds
 
 
 def test_tenant_creation(app, test_user):
@@ -23,3 +23,7 @@ def test_tenant_creation(app, test_user):
 
 def test_startup(app, test_user):
     pass
+
+
+def test_create_binds():
+    create_binds()

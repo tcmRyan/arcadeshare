@@ -1,5 +1,8 @@
-from flask import current_app, redirect, url_for, render_template
+import os
+from flask import current_app, redirect, url_for, send_from_directory
 from flask_security import login_required
+
+from server.main import main_bp
 
 
 @current_app.route("/")
@@ -7,15 +10,10 @@ def index():
     return redirect(url_for("main.app"))
 
 
-@current_app.route('/admin-login')
-@login_required
-def admin_login():
-    return redirect(url_for('security.login', next='/admin'))
-
-
-@current_app.route("/app", defaults={"path": ""})
-@current_app.route("/app/<path:path>")
+@main_bp.route("/", defaults={"path": ""})
+@main_bp.route("/<path:path>")
 def app(path):
-    if "build" in path:
-        filepath = path.spilt("build/")[1]
-    return render_template("index.html")
+    if path != "" and os.path.exists(main_bp.static_folder + '/' + path):
+        return send_from_directory(main_bp.static_folder, path)
+    else:
+        return send_from_directory(main_bp.static_folder, 'index.html')

@@ -1,3 +1,5 @@
+from flask_cors import cross_origin
+from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace
 from flask import request
 
@@ -5,14 +7,13 @@ from server.api import TenantSchema
 from server.auth.models import Tenant
 from .. import BaseResource
 
-
-ns = Namespace("tenants", description="Tenant for a given organization")
+ns = Namespace("tenants", description="Tenant for a given organization", decorators=[cross_origin()])
 
 
 @ns.route("/<int:tid>")
 class TenantResource(BaseResource, Resource):
-
     schema = TenantSchema
+    decorators = [jwt_required()]
 
     def get(self, tid):
         schema = TenantSchema()
@@ -27,7 +28,6 @@ class TenantResource(BaseResource, Resource):
 
 @ns.route("/")
 class TenantsResource(BaseResource, Resource):
-
     schema = TenantSchema(many=True)
 
     def get(self):
@@ -42,6 +42,3 @@ class TenantsResource(BaseResource, Resource):
             user.save()
         tenant.save()
         return schema.dump(tenant)
-
-
-
