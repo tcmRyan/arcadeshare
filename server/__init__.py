@@ -13,7 +13,8 @@ from flask_security import Security, SQLAlchemyUserDatastore, current_user
 from flask_cors import CORS
 from flask_admin import Admin
 from flask_admin import helpers as admin_helpers
-from paho.mqtt import client as mqtt
+from flask_mqtt import Mqtt
+from paho.mqtt.client import MQTT_LOG_ERR
 from psycopg2 import OperationalError
 import psycopg2
 from server.admin.views import ArcadeAdminIndexView, UserView
@@ -32,7 +33,7 @@ security = Security()
 login_manager = LoginManager()
 migrate = Migrate()
 cors = CORS()
-mqttc = mqtt.Client("tc")
+mqtt = Mqtt()
 
 admin_permission = Permission(RoleNeed("admin"))
 
@@ -70,27 +71,19 @@ def create_app():
     login_manager.init_app(app)
     api.init_app(app)
     admin.init_app(app)
+    mqtt.init_app(app)
 
     with app.app_context():
         from server import main, auth, api
         from server.auth.models import Role, User, Tenant
         from server import events
+        from server.api import Device
+        from server.auth import MqttAcl
 
         ds = SQLAlchemyUserDatastore(db, User, Role)
         security.init_app(app, ds)
         app.register_blueprint(main.main_bp, url_prefix="/app")
         app.register_blueprint(auth.auth_bp, url_prefix="/auth")
-        superuser = User.query.filter_by(username="system").first()
-        try:
-            # EMQX locks the database if we try to upgrade MQTT_ACL or user table while running
-            # Continue on even if we can't connect because we need to run our scripts
-            mqttc.username_pw_set(superuser.username, superuser.password_hash)
-            # mqttc.enable_logger(logger=current_app.logger)
-            mqttc.connect(host="127.0.0.1", port=1883, keepalive=60, bind_address="")
-            mqttc.loop_start()
-            mqttc.publish("test/topic", json.dumps({"message": "test"}), retain=True)
-        except ConnectionRefusedError:
-            current_app.logger.warning("Could not connect to MQTT Broker")
         admin.add_view(UserView(User, db.session))
         admin.add_view(ModelView(Role, db.session))
         admin.add_view(ModelView(Tenant, db.session))
@@ -146,6 +139,11 @@ def create_app():
             if hasattr(current_user, "roles"):
                 for role in current_user.roles:
                     identity.provides.add(RoleNeed(role.name))
+
+        @mqtt.on_log()
+        def handle_logging(client, userdata, level, buf):
+
+            print('{}: {}'.format(level, buf))
 
         @app.cli.command("provision-db")
         def provision_db():
@@ -204,5 +202,32 @@ def create_app():
                 roles=["superadmin"],
             )
             security.datastore.db.session.commit()
+
+        @app.cli.command("restore-mqtt-acl")
+        def restore_mqtt_acl():
+            tenants = Tenant.query.all()
+            for tenant in tenants:
+                users = User.query.filter_by(tenant=tenant).all()
+                for user in users:
+                    device_topic = MqttAcl(
+                        username=user.username,
+                        permission="allow",
+                        action="subscribe",
+                        topic=f"{tenant.id}/devices/update"
+                    )
+                    feed_topic = MqttAcl(
+                        username=user.username,
+                        permission="allow",
+                        action="subscribe",
+                        topic=f"{tenant.id}/feeds/update"
+                    )
+                    game_topic = MqttAcl(
+                        username=user.username,
+                        permission="allow",
+                        action="subscribe",
+                        topic=f"{tenant.id}/games/update"
+                    )
+                    db.session.add_all([device_topic, feed_topic, game_topic])
+                    db.session.commit()
 
     return app

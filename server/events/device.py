@@ -1,41 +1,27 @@
-from flask import g
+from flask import g, current_app
 
-from server import db, mqttc
-from server.api import Device, DeviceSchema, Feed, FeedSchema
-from server.auth import MqttAcl
-from server.signals import device_created, device_updated, feed_created, feed_updated
-
-
-def create_device(device: Device):
-    acl = MqttAcl()
-    acl.username = device.username
-    acl.clientid = device.client_id
-    acl.topic = f"/{g.tenant}/devices/{device.client_id}"
-    db.session.add(acl)
-    db.session.commit()
-    schema = DeviceSchema()
-    mqttc.publish(acl.topic, schema.dump(device))
+from server import mqtt
+from server.api import Device, DeviceSchema, Feed, FeedSchema, Game, GameSchema
+from server.auth import Tenant
 
 
 def update_device(device: Device):
-    topic = f"/{g.tenant}/devices/{device.client_id}"
+    tenant = Tenant.query.filter_by(name=g.tenant).first()
+
+    topic = f"{tenant.id}/devices/update"
     schema = DeviceSchema()
-    mqttc.publish(topic, schema.dump(device))
-
-
-def create_feed(feed: Feed):
-    topic = f"/{g.tenant}/devices/{feed.client_id}"
-    schema = FeedSchema()
-    mqttc.publish(topic, schema.dump(feed))
+    mqtt.publish(topic, schema.dumps(device))
 
 
 def update_feed(feed: Feed):
-    topic = f"/{g.tenant}/devices/{feed.client_id}"
+    tenant = Tenant.query.filter_by(name=g.tenant).first()
+    topic = f"{tenant.id}/feeds/updated"
     schema = FeedSchema()
-    mqttc.publish(topic, schema.dump(feed))
+    current_app.logger.info(f"Publishing update for feed: {feed.id} to {topic}")
+    mqtt.publish(topic, schema.dumps(feed))
 
 
-device_created.connect(create_device)
-device_updated.connect(update_device)
-feed_created.connect(create_feed)
-feed_updated.connect(update_feed)
+def update_game(game: Game):
+    topic = f"/{g.tenant}/games/update"
+    schema = GameSchema()
+    mqtt.publish(topic, schema.dumps(game))

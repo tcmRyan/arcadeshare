@@ -30,6 +30,7 @@ def user_login():
     login_user(user)
     identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
     profile_schema = ProfileSchema()
+    print(profile_schema.dump(Profile()))
     return profile_schema.dump(Profile())
 
 

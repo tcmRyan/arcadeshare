@@ -26,6 +26,12 @@ class Config:
     BOTO_ENDPOINT = os.environ.get("BOTO_ENDPOINT")
     BOTO_PROFILE = os.environ.get("BOTO_PROFILE")
     DEFAULT_REGION = os.environ.get("DEFAULT_REGION")
+    MQTT_BROKER_URL = os.environ.get("MQTT_BROKER_URL", "localhost")
+    MQTT_BROKER_PORT = os.environ.get("MQTT_BROKER_PORT", 1883)
+    MQTT_USERNAME = os.environ.get("MQTT_USERNAME", "system")
+    MQTT_PASSWORD = os.environ.get("MQTT_PASSWORD", "temp1234")
+    MQTT_KEEPALIVE = os.environ.get("MQTT_KEEPALIVE", 5)
+    MQTT_TLS_ENABLED = os.environ.get("MQTT_TLS_ENABLED", False)
 
 
 class DevConfig(Config):

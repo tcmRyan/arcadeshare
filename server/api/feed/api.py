@@ -40,4 +40,5 @@ class FeedResource(Resource):
         data = request.get_json()
         updated = schema.load(data, instance=Feed.query.get(fid))
         updated.save()
+
         return schema.dump(updated)
