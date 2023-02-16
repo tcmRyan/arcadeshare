@@ -23,6 +23,9 @@ from server.utils import create_binds, MultiTenantSQLA
 import logging
 
 from server.utils.storage import S3StorageProvider
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logging.getLogger('flask_cors').level = logging.INFO
 
