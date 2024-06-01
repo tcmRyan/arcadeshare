@@ -27,6 +27,7 @@ def app():
     app = create_app()
 
     with app.app_context():
+        print("create all")
         db.create_all()
         yield app
         db.session.close()
@@ -59,10 +60,8 @@ def system_user(app):
 
 @pytest.fixture()
 def tenant(app):
-    t = Tenant.query.first()
-    if t is not None:
-        sql = "DROP database test_tenant"
-        main_db_sql(sql)
+    sql = "DROP database test_tenant"
+    main_db_sql(sql)
     tenant = Tenant()
     tenant.name = "test_tenant"
     db.session.add(tenant)
