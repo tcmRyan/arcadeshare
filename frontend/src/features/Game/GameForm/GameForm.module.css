@@ -1,0 +1,25 @@
+input[type=file].hidden{
+    opacity:0;
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    width: 100%;
+    height: 100%;
+}
+
+.uploadImg{
+    pointer-events:none;
+    opacity:1;
+    text-align:center;
+    align-content: center;
+    max-height: 480px;
+    max-width: 640px;
+}
+.wrapper{
+    display: inline-block;
+    position: relative;
+    align-content: center;
+    margin: auto;
+}

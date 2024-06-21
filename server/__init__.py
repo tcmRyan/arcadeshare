@@ -111,7 +111,7 @@ def create_app():
         @app.before_first_request
         def provision_mqtt():
 
-            current_app.logger.info("Setting mqtt client")
+            current_app.logger.info("Setting mqtt frontend")
 
         secur = app.extensions["security"]
 
@@ -154,7 +154,7 @@ def create_app():
                     identity.provides.add(RoleNeed(role.name))
 
         # @mqtt.on_log()
-        # def handle_logging(client, userdata, level, buf):
+        # def handle_logging(frontend, userdata, level, buf):
         #
         #     print('{}: {}'.format(level, buf))
 

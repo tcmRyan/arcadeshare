@@ -1,0 +1,21 @@
+.gamesHeader {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 100px;
+    width: 100%;
+}
+
+.title{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0 -50% 0 0;
+    transform: translate(-50%, -50%);
+
+}
+
+.button {
+    position: absolute;
+    right: 0px;
+}

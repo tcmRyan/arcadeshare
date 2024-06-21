@@ -9,7 +9,7 @@ pip install -r requirements.txt
 
 Bring up the stack with docker compose, ensure the db is created and then create a system admin account
 
-When starting the application for the first time, you will need to setup the database and ensure that a system user is
+When starting the application for the first time, you will need to set up the database and ensure that a system user is
 created.
 
 ```shell
@@ -42,7 +42,7 @@ The UI client is located in the `client` directory. It was built using React and
 development mode:
 
 ```shell
-cd client
+cd frontend
 npm run start
 ```
 
