@@ -8,7 +8,14 @@ from flask_jwt_extended import JWTManager
 from flask_login import LoginManager, login_user
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
-from flask_principal import identity_loaded, UserNeed, RoleNeed, Permission, identity_changed, Identity
+from flask_principal import (
+    identity_loaded,
+    UserNeed,
+    RoleNeed,
+    Permission,
+    identity_changed,
+    Identity,
+)
 from flask_security import Security, SQLAlchemyUserDatastore, current_user
 from flask_cors import CORS
 from flask_admin import Admin
@@ -27,7 +34,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-logging.getLogger('flask_cors').level = logging.INFO
+logging.getLogger("flask_cors").level = logging.INFO
 
 db = MultiTenantSQLA()
 jwt = JWTManager()
@@ -59,11 +66,6 @@ def create_app():
 
     app = Flask(__name__)
     app.config.from_object(os.environ["APP_SETTINGS"])
-    try:
-        app.config["SQLALCHEMY_BINDS"] = create_binds()
-    except OperationalError as e:
-        app.logger.error(e)
-        app.logger.info("Run 'flask provision-db' to create the main database")
 
     db.init_app(app)
 
@@ -91,6 +93,12 @@ def create_app():
         admin.add_view(ModelView(Role, db.session))
         admin.add_view(ModelView(Tenant, db.session))
 
+        try:
+            app.config["SQLALCHEMY_BINDS"] = create_binds()
+        except OperationalError as e:
+            app.logger.error(e)
+            app.logger.info("Run 'flask provision-db' to create the main database")
+
         @login_manager.user_loader
         def load_user(user_id):
             return User.query.get(int(user_id))
@@ -103,7 +111,7 @@ def create_app():
         @app.before_first_request
         def provision_mqtt():
 
-            current_app.logger.info("Setting mqtt client")
+            current_app.logger.info("Setting mqtt frontend")
 
         secur = app.extensions["security"]
 
@@ -121,7 +129,9 @@ def create_app():
             user = User.query.get(identity)
             login_user(user)
             db.choose_tenant(user)
-            identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
+            identity_changed.send(
+                current_app._get_current_object(), identity=Identity(user.id)
+            )
             return user
 
         @jwt.user_identity_loader
@@ -143,10 +153,10 @@ def create_app():
                 for role in current_user.roles:
                     identity.provides.add(RoleNeed(role.name))
 
-        @mqtt.on_log()
-        def handle_logging(client, userdata, level, buf):
-
-            print('{}: {}'.format(level, buf))
+        # @mqtt.on_log()
+        # def handle_logging(frontend, userdata, level, buf):
+        #
+        #     print('{}: {}'.format(level, buf))
 
         @app.cli.command("provision-db")
         def provision_db():
@@ -155,7 +165,7 @@ def create_app():
                 user=os.environ["DB_USER"],
                 password=os.environ["DB_PASS"],
                 host=os.environ["DB_HOST"],
-                port="5432"
+                port="5432",
             )
 
             conn.autocommit = True
@@ -216,19 +226,19 @@ def create_app():
                         username=user.username,
                         permission="allow",
                         action="subscribe",
-                        topic=f"{tenant.id}/devices/update"
+                        topic=f"{tenant.id}/devices/update",
                     )
                     feed_topic = MqttAcl(
                         username=user.username,
                         permission="allow",
                         action="subscribe",
-                        topic=f"{tenant.id}/feeds/update"
+                        topic=f"{tenant.id}/feeds/update",
                     )
                     game_topic = MqttAcl(
                         username=user.username,
                         permission="allow",
                         action="subscribe",
-                        topic=f"{tenant.id}/games/update"
+                        topic=f"{tenant.id}/games/update",
                     )
                     db.session.add_all([device_topic, feed_topic, game_topic])
                     db.session.commit()

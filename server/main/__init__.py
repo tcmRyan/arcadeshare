@@ -4,8 +4,8 @@ main_bp = Blueprint(
     "main",
     __name__,
     static_url_path="/build",
-    static_folder="../../client/build",
-    template_folder="../../client/build"
+    static_folder="../../frontend/build",
+    template_folder="../../frontend/build",
 )
 
 from server.main import routes

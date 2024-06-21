@@ -1,7 +1,13 @@
 import json
 
-from server.api import Device
+from server.api import Device, DeviceSchema
 from server.signals import device_created, device_updated
+
+
+def test_create_device(test_user):
+    data = {"active": True, "name": "Pi", "owner_id": test_user.id}
+    schema = DeviceSchema()
+    device = schema.load(data)
 
 
 def test_create_device_api(a_client):
@@ -12,10 +18,7 @@ def test_create_device_api(a_client):
 
     device_created.connect(record)
 
-    data = {
-        "name": "my_device",
-        "mac": "1ED12DE3F",
-    }
+    data = {"name": "my_device", "active": True, "id": 1}
     a_client.get("/api/devices")
     resp = a_client.post(
         "/api/devices/",
@@ -48,8 +51,11 @@ def test_update_device_api(a_client):
     )
     r_data = resp.get_json()
     data2 = {"name": "updated_name"}
-    resp = a_client.put(f"/api/devices/{r_data['id']}", data=json.dumps(data2),
-                        headers={"Content-Type": "application/json"})
+    resp = a_client.put(
+        f"/api/devices/{r_data['id']}",
+        data=json.dumps(data2),
+        headers={"Content-Type": "application/json"},
+    )
     r_data2 = resp.get_json()
     assert r_data2["client_id"] == "randomhash"
     assert r_data2["name"] == data2["name"]
