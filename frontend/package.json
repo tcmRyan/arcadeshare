@@ -30,7 +30,8 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "test": "vitest"
   },
   "proxy": "http://127.0.0.1:5000/",
   "eslintConfig": {
@@ -52,9 +53,12 @@
   "devDependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "jsdom": "^24.1.0",
     "msw": "^0.47.4",
     "prettier": "2.6.2",
     "typescript": "^5.5.2",
+    "vitest": "^1.6.0",
     "webpack-cli": "^4.10.0"
   }
 }
