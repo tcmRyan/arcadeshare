@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import Home from "./features/Home/Home";
-import Auth from "./features/Auth/Auth";
-import Layout from "./components/Layout/Layout";
+import Home from "@features/Home/Home";
+import Auth from "@features/Auth/Auth";
+import Layout from "@components/Layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./app/store";
-import { checkState, oauthLogin } from "./features/Auth/actions";
+import { RootState } from "@app/store";
+import { checkState, oauthLogin } from "@features/Auth/actions";
 import { Route, Routes } from "react-router-dom";
-import Admin from "./features/Admin/Admin";
-import Dashboard from "./features/Dashboard/Dashboard";
-import Feeds from "features/Feeds/Feeds";
-import Feed from "features/Feeds/Feed/Feed";
-import Game from "./features/Game/Game";
+import Admin from "@features/Admin/Admin";
+import Dashboard from "@features/Dashboard/Dashboard";
+import Feeds from "@features/Feeds/Feeds";
+import Feed from "@features/Feeds/Feed/Feed";
+import Game from "@features/Game/Game";
 
 function App() {
   const dispatch = useDispatch();
