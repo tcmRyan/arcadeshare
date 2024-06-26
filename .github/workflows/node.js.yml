@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master" , "add-ci-testing" ]
 
 jobs:
   build:
@@ -25,4 +25,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: cd frontend
+    - run: npm install
     - run: npm run test
