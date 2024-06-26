@@ -1,5 +1,5 @@
 This project was originally bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.<br />
-It has since been migrated to Vite to avoid any issues which may arise after Create React App's deprecation.
+It has since been migrated to [Vite](https://vitejs.dev/) to avoid any issues which may arise after Create React App's deprecation.
 
 ## Available Scripts
 
