@@ -26,5 +26,5 @@ jobs:
     - name: Run tests
       working-directory: ./frontend
       run: |
-        npm install
+        npm install --force
         npm run test
