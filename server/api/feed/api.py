@@ -14,6 +14,8 @@ class FeedsResource(Resource):
     decorators = [tenant_context, jwt_required()]
 
     def get(self):
+        import pdb
+        pdb.set_trace()
         schema = FeedSchema(many=True)
         feeds = Feed.query.all()
         return schema.dump(feeds)

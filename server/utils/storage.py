@@ -95,9 +95,7 @@ class S3StorageProvider(StorageProvider):
         return client
 
     def create_bin(self, bin_name):
-        s3_bucket_create = self.client.create_bucket(Bucket=bin_name, CreateBucketConfiguration={
-            'LocationConstraint': current_app.config.get("DEFAULT_REGION")
-        })
+        s3_bucket_create = self.client.create_bucket(Bucket=bin_name)
         return s3_bucket_create
 
     def s3_version_bucket_files(self, bucket_name):
