@@ -44,6 +44,7 @@ function App() {
   return (
     <div className="App">
       <Layout>{routes}</Layout>
+      <p>HI</p>
     </div>
   );
 }
