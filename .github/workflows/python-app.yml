@@ -32,9 +32,8 @@ jobs:
       run: docker-compose up -d
         
     - name: Test with pytest
-      run: |
-        cd server
-        pytest -o faulthandler_timeout=30
+      working-directory: ./frontend
+      run: pytest -o faulthandler_timeout=5
 
     - name: Shut down Docker
       run: docker-compose down
