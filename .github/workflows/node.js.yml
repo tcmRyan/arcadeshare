@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   pull_request:
-    branches: [ "master" , "add-ci-testing" ]
+    branches: [ "master" ]
 
 jobs:
   build:
