@@ -39,6 +39,7 @@ jobs:
       run: |
         ls
         pytest test_dummy.py
+        pytest test_dummy_2.py
 
     - name: Shut down Docker
       run: docker-compose down
