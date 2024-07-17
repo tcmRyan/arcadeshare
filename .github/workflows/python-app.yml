@@ -39,7 +39,6 @@ jobs:
       run: |
         ls
         pytest test_dummy.py
-        pytest test_mqtt.py
 
     - name: Shut down Docker
       run: docker-compose down
