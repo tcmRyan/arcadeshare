@@ -20,9 +20,6 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
-
-    - name: Check Available Ports
-      run: sudo lsof -nP -iTCP -sTCP:LISTEN
         
     - name: Set up Docker
       run: docker-compose up
