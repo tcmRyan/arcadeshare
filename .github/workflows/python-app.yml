@@ -27,7 +27,6 @@ jobs:
         python-version: "3.10"
     - name: Setup Docker
       run: |
-        composer install
         docker-compose up
     - name: Install dependencies
       run: |
