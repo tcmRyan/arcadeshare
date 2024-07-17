@@ -30,7 +30,7 @@ services:
       - "EMQX_AUTH__PGSQL__PASSWORD_HASH=pbkdf2,sha256,26000"
       - "EMQX_AUTH__PGSQL__AUTH_QUERY=select password_hash from \"user\" where username = '%u' limit 1"
       - "EMQX_AUTH__PGSQL__SUPER_QUERY=select is_superuser from \"user\" where username = '%u' limit 1"
-      - "EMQX_AUTH__PGSQL__ACL_QUERY =select permission, action, topic FROM \"mqtt_acl\" WHERE username = '%u'"
+      - "EMQX_AUTH__PGSQL__ACL_QUERY=select permission, action, topic FROM \"mqtt_acl\" WHERE username = '%u'"
   localstack:
     container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
     image: localstack/localstack:latest
