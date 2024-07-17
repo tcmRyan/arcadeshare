@@ -33,9 +33,7 @@ jobs:
         
     - name: Test with pytest
       working-directory: ./server
-      run: |
-        pwd
-        pytest
+      run: pytest
 
     - name: Shut down Docker
       run: docker-compose down
