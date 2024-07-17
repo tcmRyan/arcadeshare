@@ -32,7 +32,7 @@ jobs:
       run: docker-compose up -d
         
     - name: Test with pytest
-      working-directory: ./frontend
+      working-directory: ./server
       run: |
         pwd
         pytest
