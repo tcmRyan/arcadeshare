@@ -38,7 +38,7 @@ jobs:
       working-directory: ./server/tests
       run: |
         ls
-        pytest dumy_test.py
+        pytest dummy_test.py
 
     - name: Shut down Docker
       run: docker-compose down
