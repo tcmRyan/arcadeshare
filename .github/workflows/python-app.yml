@@ -30,15 +30,10 @@ jobs:
 
     - name: Set up Docker
       run: docker-compose up -d
-
-    - name: ls Test
-      run: ls
         
     - name: Test with pytest
-      working-directory: ./server/tests
-      run: |
-        ls
-        pytest test_dummy.py test_dummy_2.py
+      working-directory: ./server
+      run: pytest
 
     - name: Shut down Docker
       run: docker-compose down
