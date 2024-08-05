@@ -18,4 +18,5 @@ client.on_message = on_message
 
 client.connect("localhost", 1883, 60)
 client.publish("emqtt", payload="Hello World", qos=0)
-client.loop_forever()
+# Infinite loop - check SCRUM-10
+# client.loop_forever()
