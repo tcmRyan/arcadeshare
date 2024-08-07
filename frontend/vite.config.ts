@@ -42,5 +42,8 @@ export default defineConfig({
       include: ['src/**/*'],
       exclude: [],
     }
+  },
+  build: {
+    outDir: '../src/server/main/build'
   }
 })
