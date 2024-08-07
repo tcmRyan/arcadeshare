@@ -1,10 +1,9 @@
 ## Getting Starting
 
-Ensure that python 3.10 is installed with an active
-virtualenv. [Setup Instructions](https://docs.python.org/3/library/venv.html).
+Ensure [Rye](https://rye.astral.sh/guide/installation/) is downloaded and installed, as well as [python 3.10](https://www.python.org/downloads/release/python-31014/).
 
 ```shell
-pip install -r requirements.txt
+rye sync
 ```
 
 Bring up the stack with docker compose, ensure the db is created and then create a system admin account
@@ -38,7 +37,7 @@ This will use the docker-compose.yaml to bring up all the dependencies for the a
 
 ## UI Client
 
-The UI client is located in the `client` directory. It was built using React and TypeScript. To run the client in
+The UI client is located in the `frontend` directory. It was built using React and TypeScript. To run the client in
 development mode:
 
 ```shell
